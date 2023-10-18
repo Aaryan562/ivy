@@ -48,6 +48,8 @@ def min(
     *,
     axis: Optional[Union[int, Sequence[int]]] = None,
     keepdims: bool = False,
+    initial: Optional[Union[int, float, complex]] = None,
+    where: Optional[ivy.Array] = None,
     out: Optional[ivy.Array] = None,
 ) -> ivy.Array:
     """
@@ -140,7 +142,9 @@ def min(
         b: ivy.array(2)
     }
     """
-    return current_backend(x).min(x, axis=axis, keepdims=keepdims, out=out)
+    return current_backend(x).min(
+        x, axis=axis, keepdims=keepdims, initial=initial, where=where, out=out
+    )
 
 
 @handle_exceptions
