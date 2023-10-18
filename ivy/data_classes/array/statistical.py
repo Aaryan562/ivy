@@ -86,6 +86,8 @@ class _ArrayWithStatistical(abc.ABC):
         *,
         axis: Optional[Union[int, Sequence[int]]] = None,
         keepdims: bool = False,
+        initial: Optional[Union[int, float, complex]] = None,
+        where: Optional[ivy.Array] = None,
         out: Optional[ivy.Array] = None,
     ) -> ivy.Array:
         """
@@ -141,7 +143,14 @@ class _ArrayWithStatistical(abc.ABC):
         >>> print(y)
         ivy.array([[4, 6, 10]])
         """
-        return ivy.max(self._data, axis=axis, keepdims=keepdims, out=out)
+        return ivy.max(
+            self._data,
+            axis=axis,
+            keepdims=keepdims,
+            initial=initial,
+            where=where,
+            out=out,
+        )
 
     def mean(
         self: ivy.Array,

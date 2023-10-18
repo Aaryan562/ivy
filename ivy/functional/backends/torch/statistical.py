@@ -74,6 +74,8 @@ def max(
     *,
     axis: Optional[Union[int, Sequence[int]]] = None,
     keepdims: bool = False,
+    initial: Optional[Union[int, float, complex]] = None,
+    where: Optional[torch.Tensor] = None,
     out: Optional[torch.Tensor] = None,
 ) -> torch.Tensor:
     if torch.is_complex(x):
@@ -90,9 +92,15 @@ def max(
             return ivy.inplace_update(out, x)
         else:
             return x
+    if where is not None:
+        x = torch.where(where, x, torch.ones_like(x) * float("-inf"))
     if not keepdims and not axis and axis != 0:
-        return torch.amax(input=x, out=out)
-    return torch.amax(input=x, dim=axis, keepdim=keepdims, out=out)
+        result = torch.amax(input=x, out=out)
+    result = torch.amax(input=x, dim=axis, keepdim=keepdims, out=out)
+    if initial is not None:
+        initial = torch.tensor(initial)
+        result = torch.maximum(result, initial)
+    return result
 
 
 max.support_native_out = True

@@ -92,6 +92,8 @@ def max(
     *,
     axis: Optional[Union[int, Sequence[int]]] = None,
     keepdims: bool = False,
+    initial: Optional[Union[int, float, complex]] = None,
+    where: Optional[paddle.Tensor] = None,
     out: Optional[paddle.Tensor] = None,
 ) -> paddle.Tensor:
     ret_dtype = x.dtype
@@ -108,6 +110,8 @@ def max(
             paddle.cast(real_max, x.dtype), paddle.multiply(img_max, const)
         )
     else:
+        if where is not None:
+            x = paddle.where(where, x, paddle.ones_like(x) * float("-inf"))
         ret = paddle.amax(x, axis=axis, keepdim=keepdims)
 
     # The following code is to simulate other frameworks
@@ -117,6 +121,9 @@ def max(
             axis = None
     if (x.ndim == 1 or axis is None) and not keepdims:
         ret = ret.squeeze()
+    if initial is not None:
+        initial = paddle.to_tensor(initial, dtype=ret_dtype)
+        ret = paddle.maximum(ret, initial)
     return ret.astype(ret_dtype)
 
 

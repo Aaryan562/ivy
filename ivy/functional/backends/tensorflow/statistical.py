@@ -65,6 +65,8 @@ def max(
     *,
     axis: Optional[Union[int, Sequence[int]]] = None,
     keepdims: bool = False,
+    initial: Optional[Union[int, float, complex]] = None,
+    where: Optional[Union[tf.Tensor, tf.Variable]] = None,
     out: Optional[Union[tf.Tensor, tf.Variable]] = None,
 ) -> Union[tf.Tensor, tf.Variable]:
     if "complex" in str(x.dtype):
@@ -82,7 +84,14 @@ def max(
         img_max = tf.cast(img_max, x.dtype)
         return tf.add(tf.cast(real_max, x.dtype), tf.multiply(img_max, const))
     axis = tuple(axis) if isinstance(axis, list) else axis
-    return tf.math.reduce_max(x, axis=axis, keepdims=keepdims)
+    if where is not None:
+        x = tf.where(
+            where, x, tf.ones_like(x) * tf.constant(float("-inf"), dtype=x.dtype)
+        )
+    result = tf.math.reduce_max(x, axis=axis, keepdims=keepdims)
+    if initial is not None:
+        result = tf.maximum(result, initial)
+    return result
 
 
 @with_unsupported_device_and_dtypes(

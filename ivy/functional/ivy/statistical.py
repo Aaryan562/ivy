@@ -161,6 +161,8 @@ def max(
     *,
     axis: Optional[Union[int, Sequence[int]]] = None,
     keepdims: bool = False,
+    initial: Optional[Union[int, float, complex]] = None,
+    where: Optional[ivy.Array] = None,
     out: Optional[ivy.Array] = None,
 ) -> ivy.Array:
     """
@@ -255,7 +257,9 @@ def max(
         b: ivy.array([4, 2])
     }
     """
-    return current_backend(x).max(x, axis=axis, keepdims=keepdims, out=out)
+    return current_backend(x).max(
+        x, axis=axis, keepdims=keepdims, initial=initial, where=where, out=out
+    )
 
 
 @handle_exceptions
