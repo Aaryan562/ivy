@@ -7,14 +7,27 @@ import torch
 # local
 import ivy
 from ivy.functional.ivy.statistical import _get_promoted_type_of_operands
-from ivy.func_wrapper import with_unsupported_dtypes, with_supported_dtypes
+from ivy.func_wrapper import (
+    with_unsupported_dtypes,
+    with_unsupported_device_and_dtypes,
+)
 from . import backend_version
 
 # Array API Standard #
 # -------------------#
 
 
-@with_unsupported_dtypes({"2.1.0 and below": ("complex",)}, backend_version)
+@with_unsupported_device_and_dtypes(
+    {
+        "2.1.0 and below": {
+            "cpu": (
+                "complex",
+                "bool",
+            )
+        }
+    },
+    backend_version,
+)
 def min(
     x: torch.Tensor,
     /,
@@ -44,6 +57,17 @@ def min(
 min.support_native_out = True
 
 
+@with_unsupported_device_and_dtypes(
+    {
+        "2.1.0 and below": {
+            "cpu": (
+                "complex",
+                "bool",
+            )
+        }
+    },
+    backend_version,
+)
 def max(
     x: torch.Tensor,
     /,
@@ -74,7 +98,10 @@ def max(
 max.support_native_out = True
 
 
-@with_supported_dtypes({"2.1.0 and below": ("float", "complex")}, backend_version)
+@with_unsupported_device_and_dtypes(
+    {"2.1.0 and below": {"cpu": ("bool",)}},
+    backend_version,
+)
 def mean(
     x: torch.Tensor,
     /,

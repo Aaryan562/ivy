@@ -5,7 +5,10 @@ from typing import Union, Optional, Sequence
 # local
 import ivy
 from ivy.functional.ivy.statistical import _get_promoted_type_of_operands
-from ivy.func_wrapper import with_unsupported_dtypes
+from ivy.func_wrapper import (
+    with_unsupported_dtypes,
+    with_unsupported_device_and_dtypes,
+)
 from . import backend_version
 from ivy.utils.einsum_parser import legalise_einsum_expr
 
@@ -13,7 +16,17 @@ from ivy.utils.einsum_parser import legalise_einsum_expr
 # -------------------#
 
 
-@with_unsupported_dtypes({"2.14.0 and below": ("complex",)}, backend_version)
+@with_unsupported_device_and_dtypes(
+    {
+        "2.14.0 and below": {
+            "cpu": (
+                "complex",
+                "bool",
+            )
+        }
+    },
+    backend_version,
+)
 def min(
     x: Union[tf.Tensor, tf.Variable],
     /,
@@ -35,6 +48,17 @@ def min(
     return result
 
 
+@with_unsupported_device_and_dtypes(
+    {
+        "2.14.0 and below": {
+            "cpu": (
+                "complex",
+                "bool",
+            )
+        }
+    },
+    backend_version,
+)
 def max(
     x: Union[tf.Tensor, tf.Variable],
     /,
@@ -61,7 +85,10 @@ def max(
     return tf.math.reduce_max(x, axis=axis, keepdims=keepdims)
 
 
-@with_unsupported_dtypes({"2.14.0 and below": ("bool",)}, backend_version)
+@with_unsupported_device_and_dtypes(
+    {"2.14.0 and below": {"cpu": ("bool",)}},
+    backend_version,
+)
 def mean(
     x: Union[tf.Tensor, tf.Variable],
     /,
@@ -195,6 +222,10 @@ def cumprod(
     return tf.math.cumprod(x, axis, exclusive, reverse)
 
 
+@with_unsupported_device_and_dtypes(
+    {"2.14.0 and below": {"cpu": ("bool",)}},
+    backend_version,
+)
 def cumsum(
     x: Union[tf.Tensor, tf.Variable],
     axis: int = 0,
