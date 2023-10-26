@@ -1,16 +1,15 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.236.0/containers/docker-existing-dockerfile
 {
-	"name": "Ivy GPU Development Environment (build)",
+	"name": "Ivy Apple Silicon Development Environment (build)",
 
 	"build": {
-		"dockerfile": "../../docker/DockerfileGPU",
+		"dockerfile": "../../docker/DockerfileAppleSilicon",
 		"context": "../..",
 		"args": {
-            "IMAGE_NAME": "unifyai/ivy",
-            "IMAGE_TAG": "latest-gpu"
-        }
+      "pycon": ["3.10"]
+    }
 	},
-
-	"runArgs": ["--gpus","all"],
 
 	"customizations": {
 		"vscode": {
@@ -41,18 +40,18 @@
 
 	// Uncomment to connect as a non-root user if you've added one. See https://aka.ms/vscode-remote/containers/non-root.
 	// "remoteUser": "vscode",
-    "features": {
+	"features": {
 		"ghcr.io/devcontainers/features/common-utils:2": {
-			"installzsh": true,
-			"configurezshasdefaultshell": true,
-			"installohmyzsh": true,
+			"installZsh": true,
+			"configureZshAsDefaultShell": true,
+			"installOhMyZsh": true,
 			"upgradePackages": false
 		},
         "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
 			"moby": true,
-			"installdockerbuildx": true,
+			"installDockerBuildx": true,
 			"version": "20.10",
-			"dockerdashcomposeversion": "v2"
+			"dockerDashComposeVersion": "v2"
 		},
 		"ghcr.io/devcontainers/features/github-cli:1": {
 			"installDirectlyFromGitHubRelease": true,
